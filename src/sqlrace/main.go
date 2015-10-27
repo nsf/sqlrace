@@ -101,6 +101,7 @@ func main() {
 	panicOnError(db.Save(&TestTable{Counter: c}).Error)
 
 	logrus.Infof("Initial counter state: %d", c)
+	logrus.Infof("Number of decrements per goroutine: %d", *iterNum)
 	logrus.Infof("Number of goroutines: %d", *goNum)
 	logrus.Infof("Method: %s", *method)
 	logrus.Infof("Method description:\n%s", strings.TrimSpace(methodDoc[*method]))
