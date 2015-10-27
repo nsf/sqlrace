@@ -25,6 +25,7 @@ Usage of ./bin/sqlrace:
 ```
 [nsf @ sqlrace]$ ./bin/sqlrace -m naive
 INFO[0000] Initial counter state: 4096
+INFO[0000] Number of decrements per goroutine: 1024
 INFO[0000] Number of goroutines: 4
 INFO[0000] Method: naive
 INFO[0000] Method description:
@@ -35,6 +36,7 @@ INFO[0000] Result: 2875
 ```
 [nsf @ sqlrace]$ ./bin/sqlrace -m transaction
 INFO[0000] Initial counter state: 4096
+INFO[0000] Number of decrements per goroutine: 1024
 INFO[0000] Number of goroutines: 4
 INFO[0000] Method: transaction
 INFO[0000] Method description:
@@ -47,6 +49,7 @@ INFO[0000] Result: 2732
 ```
 [nsf @ sqlrace]$ ./bin/sqlrace -m locked
 INFO[0000] Initial counter state: 4096
+INFO[0000] Number of decrements per goroutine: 1024
 INFO[0000] Number of goroutines: 4
 INFO[0000] Method: locked
 INFO[0000] Method description:
