@@ -4,9 +4,11 @@ If you still believe transactions alone defeat race conditions, try this demo.
 
 Compile the testing app using [gb](http://getgb.io) tool by running: `gb build`.
 
-Alternatively you can use the native go tool: `GOPATH=$PWD:$PWD/vendor go install sqlrace` (run from repository root dir, it will not work with `go get`).
+Alternatively you can use the native go tool: `GOPATH=$PWD:$PWD/vendor go install sqlrace`
 
-By default it connect to the DB under the `root` user **without a password** and connects to `127.0.0.1:3306`, uses `test` database. If you have a different testing environment setup, edit the connection string in `src/sqlrace/main.go`.
+(run from repository root dir, it will not work with `go get`).
+
+By default it connects to the DB under the `root` user **without a password** and connects to `127.0.0.1:3306`, uses `test` database. If you have a different testing environment setup, edit the connection string in `src/sqlrace/main.go`.
 
 Usage example:
 
