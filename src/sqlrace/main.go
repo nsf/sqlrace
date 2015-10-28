@@ -10,7 +10,7 @@ import (
 
 var iterNum = flag.Int("n", 1024, "number of iterations per goroutine")
 var goNum = flag.Int("g", 4, "number of goroutines")
-var method = flag.String("m", "naive", "decrement method: naive, transaction, locked")
+var method = flag.String("m", "naive", "decrement method: naive, transaction, locked, atomic")
 
 type TestTable struct {
 	ID      int64
@@ -57,28 +57,39 @@ func lockedMethod(db *gorm.DB, num int, done chan bool) {
 	done <- true
 }
 
+func atomicMethod(db *gorm.DB, num int, done chan bool) {
+	for i := 0; i < num; i++ {
+		panicOnError(db.Exec("UPDATE test_table SET counter = counter - 1").Error)
+	}
+	done <- true
+}
+
 var methodMap = map[string]func(*gorm.DB, int, chan bool){
 	"naive":       naiveMethod,
 	"transaction": transactionMethod,
 	"locked":      lockedMethod,
+	"atomic":      atomicMethod,
 }
 
 var methodDoc = map[string]string{
 	"naive": `
 SELECT * FROM table;
-UPDATE ...;
+UPDATE table SET ...;
 	`,
 	"transaction": `
 START TRANSACTION;
 SELECT * FROM table;
-UPDATE ...;
+UPDATE table SET ...;
 COMMIT;
 	`,
 	"locked": `
 START TRANSACTION;
 SELECT * FROM table FOR UPDATE;
-UPDATE ...;
+UPDATE table SET ...;
 COMMIT;
+	`,
+	"atomic": `
+UPDATE table SET counter = counter - 1;
 	`,
 }
 
@@ -94,7 +105,7 @@ func main() {
 		logrus.Fatal("Database ping error: ", err)
 	}
 	db.SingularTable(true)
-	panicOnError(db.DropTable(&TestTable{}).Error)
+	db.DropTable(&TestTable{})
 	panicOnError(db.AutoMigrate(&TestTable{}).Error)
 
 	c := int64(*iterNum * *goNum)
